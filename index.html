@@ -1,0 +1,422 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>B. Sivasagar — Product Owner, Banking &amp; Fintech</title>
+<meta name="description" content="Twelve-plus years in Mid-Corporate banking and Agile product ownership, plus fintech products I've built and shipped myself.">
+<meta property="og:title" content="B. Sivasagar — Product Owner, Banking & Fintech">
+<meta property="og:description" content="Banking depth, product ownership, and products I've built end to end.">
+<meta property="og:image" content="https://portfolio-siva-sagar.vercel.app/assets/sivasagar.jpg">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E%E2%99%94%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,500;8..60,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+:root{
+  --night:#0b0f17; --night-2:#121826; --line-d:#232b3b; --mist:#aab3c5;
+  --paper:#ecebef; --card:#f7f6f9; --ink:#141824; --muted:#4e5566; --rule:#d6d4dc;
+  --indigo:#3b3891; --blue:#2f7cf6; --gold:#c9a24a;
+  --serif:"Source Serif 4", Georgia, serif;
+  --sans:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
+  --mono:"IBM Plex Mono", ui-monospace, Menlo, monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);font-size:17px;line-height:1.6}
+img{max-width:100%;display:block}
+a{color:var(--indigo)}
+a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.wrap{max-width:1140px;margin:0 auto;padding-inline:20px}
+h1,h2,h3{font-family:var(--serif);font-weight:700;text-wrap:balance;margin:0}
+h2{font-size:clamp(30px,4vw,44px);line-height:1.12;letter-spacing:-.01em}
+h3{font-size:24px;line-height:1.2}
+p{margin:0}
+.eyebrow{font-family:var(--mono);font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:var(--indigo);font-weight:600}
+.dark .eyebrow{color:var(--gold)}
+section{padding-block:88px}
+.sec-head{display:flex;flex-direction:column;gap:12px;max-width:720px;margin-bottom:40px}
+.sec-head p{color:var(--muted)}
+.dark{background:var(--night);color:#eef1f6}
+.dark .sec-head p{color:var(--mist)}
+
+/* nav */
+header.top{position:sticky;top:0;z-index:10;background:rgba(11,15,23,.94);backdrop-filter:blur(8px);border-bottom:1px solid var(--line-d)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;min-height:72px}
+.logo{font-size:28px;color:#8fb4ff;text-decoration:none;line-height:1}
+.links{display:flex;gap:28px;align-items:center}
+.links a{color:var(--mist);text-decoration:none;font-size:16px}
+.links a:hover{color:#fff}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:46px;padding:10px 22px;border-radius:8px;font-weight:600;text-decoration:none;font-size:16px}
+.btn-blue{background:var(--blue);color:#fff !important}
+.btn-ghost{border:1px solid var(--line-d);color:#eef1f6 !important}
+@media (max-width:720px){.links a:not(.btn){display:none}}
+
+/* hero */
+.hero{padding-block:72px 96px}
+.hero-grid{display:flex;flex-wrap:wrap;gap:56px;align-items:center}
+.hero-text{flex:1 1 480px;min-width:0;display:flex;flex-direction:column;gap:22px}
+.hero h1{font-size:clamp(44px,6.4vw,76px);line-height:1.02;letter-spacing:-.02em}
+.hero .lead{font-size:20px;color:var(--mist);max-width:36em}
+.orgs{font-family:var(--mono);font-size:14px;color:var(--mist);letter-spacing:.04em}
+.ctas{display:flex;flex-wrap:wrap;gap:12px}
+.hero-photo{flex:0 1 340px;min-width:0;position:relative;margin-inline:auto}
+.hero-photo img{width:100%;aspect-ratio:4/5;object-fit:cover;border-radius:14px;background:var(--night-2)}
+.pill{position:absolute;left:16px;right:16px;bottom:16px;background:rgba(11,15,23,.88);border:1px solid var(--line-d);border-radius:10px;padding:12px 14px;display:flex;align-items:center;gap:10px;font-size:14px}
+.dot{width:9px;height:9px;border-radius:50%;background:#3ccf8e;flex:none;box-shadow:0 0 0 4px rgba(60,207,142,.18)}
+
+/* metrics */
+.metrics{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-top:40px}
+.metric{border-top:2px solid var(--ink);padding-top:14px;display:flex;flex-direction:column;gap:6px}
+.metric b{font-family:var(--serif);font-size:40px;line-height:1;color:var(--indigo)}
+.metric span{color:var(--muted);font-size:15px}
+.position{display:flex;flex-wrap:wrap;gap:40px}
+.position h2{flex:1 1 380px;min-width:0}
+.position p{flex:1 1 420px;min-width:0;color:var(--muted);font-size:18px}
+
+/* project cards */
+.cards{display:flex;flex-direction:column;gap:20px}
+.card{background:var(--card);border:1px solid var(--rule);border-radius:16px;padding:clamp(22px,3.5vw,40px);display:grid;grid-template-columns:200px minmax(0,1fr);gap:20px 36px}
+.card .side{display:flex;flex-direction:column;gap:12px}
+.num{font-family:var(--mono);font-weight:600;font-size:18px;color:var(--indigo);border:2px solid var(--indigo);border-radius:6px;width:56px;height:56px;display:grid;place-items:center}
+.impact{font-family:var(--serif);font-weight:700;font-size:44px;line-height:1.02;color:var(--indigo)}
+.card .body{display:flex;flex-direction:column;gap:14px;min-width:0}
+.card .top{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px 16px;align-items:flex-start}
+.badge{font-family:var(--mono);font-weight:600;font-size:14px;border:1px solid var(--rule);background:#fff;border-radius:6px;padding:6px 12px;white-space:nowrap}
+.card p{color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:8px}
+.tag{font-family:var(--mono);font-size:13px;font-weight:600;border:1px solid var(--rule);background:#fff;border-radius:6px;padding:5px 10px}
+.decisions{margin:0;padding-left:20px;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+details.more summary{cursor:pointer;font-weight:600;color:var(--indigo);list-style:none;display:inline-flex;gap:8px;align-items:center;min-height:44px}
+details.more summary::-webkit-details-marker{display:none}
+details.more summary::after{content:"+";font-family:var(--mono)}
+details.more[open] summary::after{content:"–"}
+details.more .inner{display:flex;flex-direction:column;gap:12px;padding-top:4px}
+.card.own{border-color:var(--indigo);box-shadow:0 0 0 1px var(--indigo) inset}
+@media (max-width:760px){.card{grid-template-columns:1fr}.card .side{flex-direction:row;align-items:center;gap:16px}.impact{font-size:36px}}
+
+.pipeline{margin-top:28px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:16px}
+.pipe{border:1px dashed var(--indigo);border-radius:12px;padding:18px 20px;display:flex;flex-direction:column;gap:6px}
+.pipe .eyebrow{font-size:12px}
+.pipe p{color:var(--muted);font-size:16px}
+
+.depth{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1px;background:var(--line-d);border:1px solid var(--line-d);border-radius:14px;overflow:hidden}
+.depth div{background:var(--night-2);padding:24px;display:flex;flex-direction:column;gap:8px}
+.depth b{font-family:var(--serif);font-size:34px;line-height:1.05;color:#fff}
+.depth span{color:var(--mist);font-size:15px}
+
+/* competencies & approach */
+.grid4{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
+.block{background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:10px}
+.block .glyph{font-size:30px;line-height:1;color:var(--indigo)}
+.block p{color:var(--muted);font-size:16px}
+.dark .block{background:var(--night-2);border-color:var(--line-d)}
+.dark .block p{color:var(--mist)}
+.dark .block .glyph{color:var(--gold)}
+
+/* about */
+.about{display:flex;flex-wrap:wrap;gap:48px}
+.about-main{flex:2 1 520px;min-width:0;display:flex;flex-direction:column;gap:28px}
+.about-side{flex:1 1 260px;min-width:0;align-self:flex-start;background:var(--card);border:1px solid var(--rule);border-radius:14px;padding:24px;display:flex;flex-direction:column;gap:18px}
+.about-side div{display:flex;flex-direction:column;gap:2px}
+.about-side small{font-family:var(--mono);font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.about-side b{font-family:var(--serif);font-size:24px}
+.chapter{display:flex;flex-direction:column;gap:8px;border-left:2px solid var(--indigo);padding-left:20px}
+.chapter p{color:var(--muted)}
+
+/* timeline */
+.timeline{display:flex;flex-direction:column}
+.job{display:grid;grid-template-columns:200px minmax(0,1fr);gap:8px 36px;padding-block:28px;border-top:1px solid var(--line-d)}
+.job .when{font-family:var(--mono);font-size:14px;color:var(--gold);padding-top:4px}
+.job h3{font-size:22px}
+.job .org{color:var(--mist);margin-bottom:8px}
+.job ul{margin:0;padding-left:20px;color:var(--mist);display:flex;flex-direction:column;gap:4px;font-size:16px}
+@media (max-width:760px){.job{grid-template-columns:1fr}}
+
+/* contact */
+.contact-box{background:var(--night);color:#eef1f6;border-radius:20px;padding:clamp(28px,5vw,56px);display:flex;flex-wrap:wrap;gap:32px;justify-content:space-between;align-items:center}
+.contact-box > div{flex:1 1 360px;min-width:0;display:flex;flex-direction:column;gap:14px}
+.contact-box p{color:var(--mist)}
+.reach{display:flex;flex-direction:column;gap:12px;flex:0 1 380px}
+.reach-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px;background:var(--night-2);border:1px solid var(--line-d);border-radius:10px;padding:12px 14px;font-size:15px}
+.reach-row code{font-family:var(--mono);color:#fff;overflow-wrap:anywhere;flex:1 1 200px}
+.copy{background:none;border:1px solid var(--line-d);color:#eef1f6;border-radius:6px;padding:6px 10px;font:inherit;font-size:13px;cursor:pointer;min-height:36px}
+footer{padding-block:32px;color:var(--muted);font-size:15px}
+footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <nav class="wrap nav" aria-label="Main">
+    <a class="logo" href="#home" aria-label="Back to top">♔</a>
+    <div class="links">
+      <a href="#about">About</a>
+      <a href="#products">Products</a>
+      <a href="#experience">Experience</a>
+      <a class="btn btn-blue" href="#contact">Contact me</a>
+    </div>
+  </nav>
+</header>
+
+<main id="home">
+<section class="dark hero">
+  <div class="wrap hero-grid">
+    <div class="hero-text">
+      <span class="eyebrow">Banking · Product Ownership · Building my own fintech products</span>
+      <h1>Hi, I'm B.&nbsp;Sivasagar.</h1>
+      <p class="lead">Twelve-plus years in Mid-Corporate banking and Agile product ownership. I build platforms banks can trust, and in my own time I ship money tools for Indian households.</p>
+      <p class="orgs">IIM Calcutta · ICICI Bank · Tech Mahindra · Jana Small Finance Bank</p>
+      <div class="ctas">
+        <a class="btn btn-blue" href="#products">See what I've built</a>
+        <a class="btn btn-ghost" href="#experience">View the timeline</a>
+      </div>
+    </div>
+    <div class="hero-photo">
+      <img src="https://portfolio-siva-sagar.vercel.app/assets/sivasagar.jpg" alt="B. Sivasagar" width="340" height="425">
+      <div class="pill"><span class="dot" aria-hidden="true"></span><span>12+ yrs experience · Open to Product Manager / Product Owner roles</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="position">
+      <h2>A career built across two disciplines that rarely meet</h2>
+      <p>Most product managers learn banking second-hand. Most bankers never own a backlog. I've sat on both sides of that table: underwriting credit files and running sprint backlogs with the same scrutiny.</p>
+    </div>
+    <div class="metrics">
+      <div class="metric"><b>75%</b><span>Faster loan onboarding on a digital platform I owned as Product Owner</span></div>
+      <div class="metric"><b>₹900 Cr</b><span>Mid-Corporate portfolio managed at ICICI Bank</span></div>
+      <div class="metric"><b>₹1,636 Cr</b><span>Equity capital raise supported at Jana Small Finance Bank</span></div>
+      <div class="metric"><b>₹67 Cr</b><span>Recovered through data-driven stressed-asset restructuring</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="products" style="padding-top:24px">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Products I've built</span>
+      <h2>Products I've built, end to end</h2>
+      <p>Further down is work I did inside a bank or a client team. These are different: products where I picked the problem, scoped it, built it, priced it and put it in front of real users myself.</p>
+    </div>
+    <div class="cards">
+      <article class="card own">
+        <div class="side"><span class="num">01</span><span class="impact">₹199</span></div>
+        <div class="body">
+          <div class="top"><h3>EMI-Free Date Planner · MapMyRupee</h3><span class="badge">Founder &amp; PM</span></div>
+          <p>Salaried Indians with two to four loans prepay on instinct, because bank calculators handle one loan at a time. I built a planner that compares loans side by side, shows which to close first, and gives the exact month you become EMI-free. Launching on SuperProfile, October 2026.</p>
+          <details class="more">
+            <summary>Read the case study</summary>
+            <div class="inner">
+              <p><strong>The problem.</strong> A household with a home loan, a car loan and a personal loan gets a bonus. Which loan should it go to? Bank calculators answer for one loan at a time and ignore prepayment charges, so people guess.</p>
+              <p><strong>Key decisions.</strong></p>
+              <ol class="decisions">
+                <li>Scoped v1 to 3–4 loans and three prepayment styles: extra each month, extra EMIs per quarter or year, or a fixed yearly lump sum.</li>
+                <li>Modelled Indian fine print: prepayment charges as a percentage or a fixed fee, with GST.</li>
+                <li>Shipped two formats, a web planner and a Google Sheets / Excel version, because users split between "just show me" and "show me the formula."</li>
+                <li>Launched one product first and held the follow-on (where spare money should go if not prepayment) for a second release.</li>
+              </ol>
+              <p><strong>What users told me.</strong> Early testers found it useful but hesitated to pay, since free calculators and AI tools exist. Rather than cut the price, I'm adding features that justify ₹199.</p>
+              <p><strong>Brand.</strong> Dropped a crowded first name after checking every channel, and chose MapMyRupee so the handle is identical on Instagram, LinkedIn and Facebook.</p>
+            </div>
+          </details>
+          <div class="tags"><span class="tag">Product Discovery</span><span class="tag">Scoping</span><span class="tag">Pricing</span><span class="tag">Go-to-market</span></div>
+        </div>
+      </article>
+
+      <article class="card own">
+        <div class="side"><span class="num">02</span><span class="impact">AI intake</span></div>
+        <div class="body">
+          <div class="top"><h3>Restock Desk · Navinook</h3><span class="badge">Internal tool</span></div>
+          <p>Suppliers send new stock as WhatsApp photos and messages, and turning them into store listings was the daily bottleneck for my ethnic-wear store. I built a browser tool that reads product details from photos with AI, applies fixed SKU, pricing and collection rules, and creates products in Shopify or exports a ready-to-import file.</p>
+          <details class="more">
+            <summary>Read the case study</summary>
+            <div class="inner">
+              <p><strong>The problem.</strong> Each supplier batch arrives as images with prices and fabric details buried in text overlays and chat messages. Uploading by hand was slow, and inconsistent tags quietly broke the store's collections.</p>
+              <p><strong>Key decisions.</strong></p>
+              <ol class="decisions">
+                <li>Human in the loop, not full automation: for each product I choose whether the description comes from a category template, text read from the image, the WhatsApp message or my own notes.</li>
+                <li>Rules as requirements: a fixed SKU convention (vendor, fabric, work type, date), pricing rules, and a closed list of product types and tags that matches the store's collection rules.</li>
+                <li>Two paths by batch size: small batches go straight into Shopify through its API; batches of 50–100 go through a CSV import.</li>
+                <li>Consistency at the source: automatic photo normalization so products from different suppliers look uniform.</li>
+              </ol>
+              <p><strong>Along the way.</strong> Traced a recurring Shopify import error to a missing product category when certain attributes are filled, and made the tool warn before it happens.</p>
+            </div>
+          </details>
+          <div class="tags"><span class="tag">Workflow Automation</span><span class="tag">GenAI</span><span class="tag">Shopify API</span><span class="tag">Human-in-the-loop</span></div>
+        </div>
+      </article>
+
+      <article class="card own">
+        <div class="side"><span class="num">03</span><span class="impact">Live store</span></div>
+        <div class="body">
+          <div class="top"><h3>Navinook · <a href="https://navinook.com" target="_blank" rel="noopener">navinook.com</a></h3><span class="badge">Founder, D2C</span></div>
+          <p>I run Navinook, a Shopify store for women's and kids' ethnic wear sourced from regional suppliers. I own everything from catalogue structure and pricing rules to the site's conversion review, which is how I learned what a product backlog feels like when every item costs your own money.</p>
+          <div class="tags"><span class="tag">E-commerce</span><span class="tag">Catalogue Ops</span><span class="tag">Conversion</span></div>
+        </div>
+      </article>
+    </div>
+
+    <div class="pipeline">
+      <div class="pipe"><span class="eyebrow">In the pipeline</span><strong>Investment comparison calculator</strong><p>Compare a car, a home loan or a SIP side by side over five years, including an input for the emotional value of a purchase.</p></div>
+      <div class="pipe"><span class="eyebrow">In the pipeline</span><strong>Stock comparison tool</strong><p>An educational calculator for comparing 4–5 Indian stocks on their historical ranges. The user picks the stocks; the tool never recommends.</p></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:24px">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Product delivery</span>
+      <h2>Initiatives, not job titles</h2>
+      <p>Product ownership inside client and bank teams, where banking domain knowledge met delivery.</p>
+    </div>
+    <div class="cards">
+      <article class="card">
+        <div class="side"><span class="num">04</span><span class="impact">75%</span></div>
+        <div class="body">
+          <div class="top"><h3>Digital loan onboarding platform (NBFC)</h3><span class="badge">Faster onboarding</span></div>
+          <p>Lead Business Analyst and Product Owner for an eKYC- and API-driven onboarding platform. Ran requirement workshops and stakeholder interviews, defined epics and acceptance criteria, and drove backlog refinement that cut onboarding turnaround time by three-quarters.</p>
+          <div class="tags"><span class="tag">Product Ownership</span><span class="tag">eKYC / APIs</span><span class="tag">Backlog Refinement</span></div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="side"><span class="num">05</span><span class="impact">4-cloud</span></div>
+        <div class="body">
+          <div class="top"><h3>HSBC IT Asset Management: data governance</h3><span class="badge">Data governance</span></div>
+          <p>Source-to-target data mapping for IT Asset Management data products spanning AWS, Azure, GCP and Alibaba Cloud. Ran SQL reconciliation and mismatch analysis to hold data quality and regulatory compliance to standard.</p>
+          <div class="tags"><span class="tag">SQL Reconciliation</span><span class="tag">Cross-Cloud</span><span class="tag">Regulatory Governance</span></div>
+        </div>
+      </article>
+      <article class="card">
+        <div class="side"><span class="num">06</span><span class="impact">GenAI</span></div>
+        <div class="body">
+          <div class="top"><h3>Financial Statement Analyzer &amp; Competitive Analysis tool</h3><span class="badge">Copilot tooling</span></div>
+          <p>Built GenAI-copilot tools using prompt engineering to extract and validate financial metrics, lifting analytical efficiency across banking workflows.</p>
+          <div class="tags"><span class="tag">GenAI</span><span class="tag">Prompt Engineering</span><span class="tag">Process Automation</span></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="dark">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Domain depth</span>
+      <h2>The banking depth underneath</h2>
+    </div>
+    <div class="depth">
+      <div><b>₹900 Cr</b><span>Mid-Corporate portfolio owned end to end at ICICI Bank: lending, underwriting, working capital, treasury</span></div>
+      <div><b>₹67 Cr</b><span>Recovered from stressed accounts through data-driven restructuring</span></div>
+      <div><b>₹1,636 Cr</b><span>Equity raise supported at Jana Small Finance Bank, with ALM, FTP and Basel III models</span></div>
+      <div><b>TCO</b><span>ROI and total-cost-of-ownership models for Azure migrations at Click2Cloud</span></div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Core competencies</span>
+      <h2>Where the domain knowledge sits</h2>
+    </div>
+    <div class="grid4">
+      <div class="block"><span class="glyph" aria-hidden="true">♜</span><h3>Commercial Banking</h3><p>Mid-Corporate lending, treasury management, working capital, credit underwriting, stressed asset recovery.</p></div>
+      <div class="block"><span class="glyph" aria-hidden="true">♞</span><h3>Product Management &amp; Agile</h3><p>Backlog prioritization, epics and user stories, acceptance criteria, sprint planning, release management.</p></div>
+      <div class="block"><span class="glyph" aria-hidden="true">♝</span><h3>Process Automation &amp; AI</h3><p>Digital onboarding (eKYC/APIs), GenAI copilot solutions, workflow automation, process redesign.</p></div>
+      <div class="block"><span class="glyph" aria-hidden="true">♟</span><h3>Data, Risk &amp; Controls</h3><p>Source-to-target data governance, SQL reconciliation, cross-cloud architectures (AWS/Azure/GCP), RBI regulatory frameworks.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="about" style="padding-top:24px">
+  <div class="wrap about">
+    <div class="about-main">
+      <div class="sec-head" style="margin-bottom:0">
+        <span class="eyebrow">About</span>
+        <h2>The banker who learned to ship</h2>
+        <p>Twelve-plus years, five organisations, and one recurring habit: reading the whole board before committing to a move.</p>
+      </div>
+      <div class="chapter"><span class="eyebrow">Chapter one</span><h3>Corporate banking</h3><p>Underwriting Mid-Corporate credit, structuring treasury solutions and advising CFOs taught me to read the position fully before acting, because the cost of a bad move in banking is never abstract.</p></div>
+      <div class="chapter"><span class="eyebrow">Chapter two</span><h3>IIM Calcutta and the pivot</h3><p>The MBA sharpened the strategy side and set up a deliberate move into Agile product ownership. The discipline stayed the same: backlogs instead of balance sheets, sprints instead of settlement cycles.</p></div>
+      <div class="chapter"><span class="eyebrow">Chapter three</span><h3>Product ownership, today</h3><p>I read credit files and sprint backlogs with equal scrutiny, building onboarding systems, data governance and GenAI tooling designed to survive a compliance review. Outside work, I build and sell my own products.</p></div>
+    </div>
+    <aside class="about-side" aria-label="At a glance">
+      <div><small>Credential</small><b>MBA, IIM Calcutta</b></div>
+      <div><small>Organisations</small><b>5, banking to product</b></div>
+      <div><small>Experience</small><b>12+ years across BFSI</b></div>
+      <div><small>Certifications</small><span>PSPO (AI Essentials) · Business Analysis · AI Blue Belt (ML &amp; Data Science) · AI White Belt (Prompt Engineering)</span></div>
+    </aside>
+  </div>
+</section>
+
+<section style="padding-top:24px">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">How the work gets done</span>
+      <h2>An approach carried over from banking</h2>
+    </div>
+    <div class="grid4">
+      <div class="block"><h3>Read before you move</h3><p>Full requirement and stakeholder analysis before a single epic gets written, with the rigour of underwriting a credit file.</p></div>
+      <div class="block"><h3>Data before conviction</h3><p>Decisions grounded in reconciled data and financial modelling, not assumptions. A habit from treasury and risk work.</p></div>
+      <div class="block"><h3>Build for scrutiny</h3><p>Platforms designed to survive an audit, not just a demo, informed by years of regulatory and compliance exposure.</p></div>
+      <div class="block"><h3>Plain communication</h3><p>BRDs, dashboards and exec updates written so technology, business and compliance teams read the same reality.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="experience" class="dark">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow">Experience · 2011 to present</span>
+      <h2>Twelve-plus years, five organisations, one throughline</h2>
+      <p>Corporate lending gave way to strategy, and strategy to product ownership, each move carrying the same instinct for knowing where the risk sits.</p>
+    </div>
+    <div class="timeline">
+      <div class="job"><span class="when">Jan 2023 – Present</span><div><h3>Engagement Manager, BFSI &amp; Digital Solutions</h3><p class="org">Tech Mahindra</p><ul><li>Business analysis and product ownership for an NBFC's digital loan onboarding platform (eKYC, APIs, verification workflows); backlog refinement cut turnaround time by 75%.</li><li>Source-to-target data mapping and SQL reconciliation for HSBC IT Asset Management across AWS, Azure, GCP and Alibaba Cloud.</li><li>Built a Financial Statement Analyzer and Competitive Analysis tool with Copilot and prompt engineering.</li><li>Authored BRDs, functional specs, SOWs and executive dashboards across technology, business, operations and compliance teams.</li></ul></div></div>
+      <div class="job"><span class="when">Apr 2022 – Oct 2022</span><div><h3>Senior Financial Analyst, Microsoft Azure Program</h3><p class="org">Click2Cloud</p><ul><li>ROI, pricing and total-cost-of-ownership models comparing on-premise infrastructure with Azure, informing enterprise modernization decisions.</li></ul></div></div>
+      <div class="job"><span class="when">Aug 2018 – Mar 2022</span><div><h3>Chief Manager, Mid Corporate Group</h3><p class="org">ICICI Bank</p><ul><li>Owned a ₹900 Cr Mid-Corporate portfolio: corporate lending, credit underwriting, working capital and treasury solutions across industries.</li><li>Designed data-driven restructuring strategies for distressed assets, recovering ₹67 Cr.</li><li>Advised CFOs and promoters on capital structuring, cash management and financial sustainability.</li></ul></div></div>
+      <div class="job"><span class="when">Jun 2015 – Jul 2018</span><div><h3>Manager, Corporate Strategy &amp; Planning</h3><p class="org">Jana Small Finance Bank</p><ul><li>Built Asset Liability Management, Funds Transfer Pricing and Basel III capital adequacy operating models.</li><li>Led strategic planning, budgeting and investor relations modelling for a ₹1,636 Cr equity raise.</li><li>"Best Employee" award from the MD &amp; CFO, FY17.</li></ul></div></div>
+      <div class="job"><span class="when">Full-time MBA</span><div><h3>MBA, Indian Institute of Management Calcutta</h3><p class="org">Between corporate banking and strategy roles</p></div></div>
+      <div class="job"><span class="when">Oct 2011 – May 2012</span><div><h3>Assistant Systems Engineer</h3><p class="org">Tata Consultancy Services, Hyderabad</p><ul><li>Requirements gathering, functional documentation and RFP preparation.</li></ul></div></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="contact-box">
+      <div>
+        <span class="eyebrow" style="color:var(--gold)">Open to the next opportunity</span>
+        <h2>Let's talk.</h2>
+        <p>For Product Manager and Product Owner roles, banking-domain consulting, or digital transformation work.</p>
+      </div>
+      <div class="reach">
+        <div class="reach-row"><code id="email">bsivasagar2015@email.iimcal.ac.in</code><button class="copy" type="button" data-copy="email">Copy</button></div>
+        <a class="btn btn-blue" href="mailto:bsivasagar2015@email.iimcal.ac.in">Email me</a>
+        <a class="btn btn-ghost" href="https://www.linkedin.com/in/balannagari-sivasagar-ab467b95" target="_blank" rel="noopener">LinkedIn profile</a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap"><span>B. Sivasagar · Product Owner, Banking &amp; Fintech · Based in India</span><a href="#home">Back to top ↑</a></div>
+</footer>
+
+<script>
+document.querySelectorAll('[data-copy]').forEach(function(b){
+  b.addEventListener('click',function(){
+    var t=document.getElementById(b.dataset.copy).textContent;
+    var done=function(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1600)};
+    if(navigator.clipboard){navigator.clipboard.writeText(t).then(done,function(){})}
+  });
+});
+</script>
+</body>
+</html>
