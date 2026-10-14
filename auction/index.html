@@ -1,0 +1,750 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Auction It Out</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800;900&family=Figtree:wght@400;500;600;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+:root{
+  --bg:#EDF0F5; --surface:#FFFFFF; --surface-2:#F5F7FA; --ink:#111A2E; --muted:#5B6479; --line:#D6DCE6;
+  --accent:#D99A06; --accent-soft:#FBEFCF; --accent-ink:#2A1C00;
+  --live:#D2323F; --ok:#15845A; --warn:#B8660B;
+  --display:"Big Shoulders Display", "Oswald", "Arial Narrow", sans-serif;
+  --body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --r:10px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#0C1220; --surface:#141C2D; --surface-2:#1A2338; --ink:#E7ECF4; --muted:#96A0B5; --line:#27324B;
+    --accent:#F2B92B; --accent-soft:#3A2E0E; --accent-ink:#1C1300;
+    --live:#F0525E; --ok:#3CC08A; --warn:#E99A3C;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0C1220; --surface:#141C2D; --surface-2:#1A2338; --ink:#E7ECF4; --muted:#96A0B5; --line:#27324B;
+  --accent:#F2B92B; --accent-soft:#3A2E0E; --accent-ink:#1C1300;
+  --live:#F0525E; --ok:#3CC08A; --warn:#E99A3C;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:15px;line-height:1.45;padding-inline:16px;padding-block:0 40px}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.num{font-variant-numeric:tabular-nums}
+.wrap{max-width:1180px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-block:18px 4px}
+.brand{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+.brand h1{font-family:var(--display);font-weight:900;font-size:30px;letter-spacing:.02em;margin:0;text-transform:uppercase;line-height:1}
+.brand h1 span{color:var(--accent)}
+.proto{font-size:12px;color:var(--muted);letter-spacing:.08em;text-transform:uppercase}
+.top-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:5px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--line)}
+.pill .dot{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.pill.live .dot{background:var(--live);animation:blink 1.1s infinite}
+.pill.live{color:var(--live)}
+@keyframes blink{50%{opacity:.25}}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 14px;font-weight:600;font-size:14px}
+.btn:hover{border-color:var(--muted)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn.primary{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.btn.go{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-family:var(--display);font-weight:900;font-size:22px;text-transform:uppercase;letter-spacing:.03em;padding:10px 22px}
+
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+h2{font-family:var(--display);font-weight:800;font-size:24px;text-transform:uppercase;letter-spacing:.02em;margin:0 0 10px}
+.empty{font-size:13px;color:var(--muted)}
+
+/* ---------- Setup ---------- */
+.steps{display:flex;gap:8px;align-items:center;font-size:13px;color:var(--muted);flex-wrap:wrap}
+.steps b{color:var(--ink)}
+.setup{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:20px;align-items:start}
+@media (max-width:920px){.setup{grid-template-columns:minmax(0,1fr)}}
+.form{padding:18px 20px;display:flex;flex-direction:column;gap:18px}
+.group{display:flex;flex-direction:column;gap:12px;padding-top:16px;border-top:1px solid var(--line)}
+.group:first-of-type{border-top:0;padding-top:0}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.row3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.field{display:flex;flex-direction:column;gap:5px}
+.field label,.field .fl{font-weight:600;font-size:13px}
+.field .hint{font-size:12px;color:var(--muted)}
+.field input,.field select{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:8px 10px;width:100%}
+.listpanel{padding:18px 20px;display:flex;flex-direction:column;gap:14px}
+.drop{border:2px dashed var(--line);border-radius:10px;padding:18px;display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:var(--surface-2)}
+.drop.over{border-color:var(--accent);background:var(--accent-soft)}
+.drop .txt{flex:1;min-width:200px}
+.drop .txt b{display:block}
+.cols{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.cols code{font-size:12px;background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:1px 6px}
+.cols code.opt{color:var(--muted)}
+.msg{font-size:13px;border-radius:8px;padding:10px 12px;border:1px solid var(--line)}
+.msg.bad{border-color:color-mix(in srgb,var(--live) 45%,var(--line));color:var(--live)}
+.msg.ok{border-color:color-mix(in srgb,var(--ok) 45%,var(--line));color:var(--ok)}
+.msg ul{margin:6px 0 0;padding-left:18px}
+.summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:1px;background:var(--line);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+@media (max-width:640px){.summary{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.summary>div{background:var(--surface);padding:12px 16px}
+.summary .v{font-family:var(--display);font-weight:800;font-size:28px;line-height:1.1}
+.checks{display:flex;flex-direction:column;gap:6px;font-size:13px}
+.checks .c{display:flex;gap:8px;align-items:flex-start}
+.checks .c i{font-style:normal;font-weight:700;width:14px;flex:none}
+.checks .c.ok i{color:var(--ok)} .checks .c.warn i{color:var(--warn)}
+.slabs{display:flex;flex-direction:column;gap:8px}
+.slab{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) 34px;gap:8px;align-items:end}
+.slab .x{height:38px;border:1px solid var(--line);background:var(--surface);border-radius:8px;font-size:18px;line-height:1;color:var(--muted)}
+.slab .x:disabled{visibility:hidden}
+.slab .fixed{border:1px dashed var(--line);border-radius:8px;padding:8px 10px;color:var(--muted);font-size:14px}
+.ladder{font-size:12px;color:var(--muted);background:var(--surface-2);border-radius:8px;padding:8px 10px;line-height:1.7}
+.ladder b{color:var(--ink);font-weight:600}
+.startbar{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+
+/* ---------- Room ---------- */
+.room{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start}
+@media (max-width:920px){.room{grid-template-columns:minmax(0,1fr)}}
+.stage{position:relative;overflow:hidden}
+.stage-head{display:flex;justify-content:space-between;align-items:center;padding:14px 20px;border-bottom:1px solid var(--line);gap:10px;flex-wrap:wrap}
+.stage-body{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+@media (max-width:640px){.stage-body{grid-template-columns:minmax(0,1fr)}}
+.player{padding:24px 20px;display:flex;flex-direction:column;gap:14px;border-right:1px solid var(--line)}
+@media (max-width:640px){.player{border-right:0;border-bottom:1px solid var(--line)}}
+.role-row{display:flex;gap:8px;flex-wrap:wrap}
+.tag{font-size:12px;font-weight:700;letter-spacing:.06em;padding:3px 8px;border-radius:5px;background:var(--surface-2);border:1px solid var(--line)}
+.tag.role{background:var(--accent-soft);border-color:transparent}
+.pname{font-family:var(--display);font-weight:800;font-size:clamp(40px,6vw,60px);line-height:.95;text-transform:uppercase;margin:0;text-wrap:balance}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-top:auto}
+.fact .v{font-family:var(--display);font-weight:800;font-size:26px}
+.bidside{padding:24px 20px;display:flex;flex-direction:column;gap:16px}
+.bidline{display:flex;align-items:center;gap:18px;justify-content:space-between}
+.amount{font-family:var(--display);font-weight:900;font-size:clamp(46px,7vw,68px);line-height:1}
+.amount.flash{animation:flash .5s}
+@keyframes flash{0%{color:var(--accent);transform:scale(1.05)}100%{color:var(--ink);transform:scale(1)}}
+.leader{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:15px;min-height:26px}
+.swatch{width:12px;height:12px;border-radius:3px;flex:none}
+.ring{position:relative;width:96px;height:96px;flex:none}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .track{fill:none;stroke:var(--line);stroke-width:8}
+.ring .prog{fill:none;stroke:var(--ok);stroke-width:8;stroke-linecap:round}
+.ring.low .prog{stroke:var(--live)}
+.ring.wait .prog{stroke:var(--muted)}
+.ring .sec{position:absolute;inset:0;display:grid;place-items:center;font-family:var(--display);font-weight:800;font-size:32px}
+.ring.low .sec{color:var(--live)}
+.bidbtn{width:100%;border:0;border-radius:12px;padding:18px 16px;background:var(--accent);color:var(--accent-ink);display:flex;flex-direction:column;align-items:center;gap:2px;transition:transform .08s,filter .15s}
+.bidbtn:hover:not(:disabled){filter:brightness(1.05)}
+.bidbtn:active:not(:disabled){transform:scale(.98)}
+.bidbtn .big{font-family:var(--display);font-weight:900;font-size:34px;letter-spacing:.02em;text-transform:uppercase;line-height:1}
+.bidbtn .small{font-size:12px;font-weight:600;opacity:.8}
+.bidbtn:disabled{background:var(--surface-2);color:var(--muted);cursor:not-allowed;border:1px dashed var(--line)}
+.why{font-size:13px;color:var(--muted);min-height:19px;text-align:center}
+.overlay{position:absolute;inset:0;display:grid;place-items:center;background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(2px);z-index:3;text-align:center;padding:20px}
+.stamp{font-family:var(--display);font-weight:900;font-size:clamp(64px,12vw,120px);line-height:.9;text-transform:uppercase;color:var(--accent);border:6px solid var(--accent);padding:6px 24px;border-radius:12px;transform:rotate(-6deg);animation:stamp .35s cubic-bezier(.2,1.6,.4,1)}
+.stamp.unsold{color:var(--muted);border-color:var(--muted)}
+@keyframes stamp{from{transform:rotate(-6deg) scale(1.8);opacity:0}}
+.overlay p{font-size:18px;font-weight:600;margin:22px 0 0}
+.overlay .sub{font-size:14px;color:var(--muted);margin-top:6px}
+
+.side{display:flex;flex-direction:column;gap:20px}
+.you{padding:18px 20px;display:flex;flex-direction:column;gap:12px}
+.you-head{display:flex;align-items:center;gap:10px}
+.purse{font-family:var(--display);font-weight:900;font-size:48px;line-height:1}
+.bar{height:8px;background:var(--surface-2);border-radius:999px;overflow:hidden;border:1px solid var(--line)}
+.bar i{display:block;height:100%;background:var(--accent);border-radius:999px;transition:width .3s}
+.kv{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.kv .v{font-weight:700;font-size:16px}
+.req{display:flex;gap:6px;flex-wrap:wrap}
+.req span{font-size:12px;font-weight:700;padding:3px 8px;border-radius:5px;border:1px solid var(--line)}
+.req span.met{color:var(--ok);border-color:color-mix(in srgb,var(--ok) 40%,var(--line))}
+.req span.miss{color:var(--warn);border-color:color-mix(in srgb,var(--warn) 40%,var(--line))}
+.feed{padding:16px 0 8px}
+.feed .label{padding:0 20px 8px}
+.feed ol{list-style:none;margin:0;padding:0;max-height:300px;overflow:auto}
+.feed li{display:flex;align-items:center;gap:10px;padding:8px 20px;border-top:1px solid var(--line);font-size:14px}
+.feed li .t{margin-left:auto;font-weight:700}
+.feed li.res{background:var(--surface-2);font-weight:600}
+.feed li.mine{background:var(--accent-soft)}
+
+.teams{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.team{padding:14px 16px;display:flex;flex-direction:column;gap:10px}
+.team.me{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent) inset}
+.team-top{display:flex;align-items:center;gap:8px}
+.team-top .n{margin-left:auto;font-size:13px;color:var(--muted)}
+.team-money{display:flex;justify-content:space-between;font-size:13px;color:var(--muted)}
+.team-money b{color:var(--ink);font-size:15px}
+.squad{list-style:none;margin:0;padding:0;font-size:13px}
+.squad li{display:flex;gap:8px;padding:5px 0;border-top:1px solid var(--line)}
+.squad li .rc{width:38px;color:var(--muted);font-weight:700;font-size:11px;letter-spacing:.05em;padding-top:2px}
+.squad li .p{margin-left:auto;font-weight:600}
+
+.pool-head{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+.pool-head h2{margin:0}
+.filters{display:flex;gap:6px;flex-wrap:wrap}
+.filters button{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:4px 12px;font-size:13px;font-weight:600}
+.filters button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tablewrap{overflow-x:auto}
+.tablewrap.tall{max-height:420px;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:14px;min-width:520px}
+th{text-align:left;font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:700;padding:10px 14px;border-bottom:1px solid var(--line);background:var(--surface);position:sticky;top:0}
+td{padding:9px 14px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+tr.now td{background:var(--accent-soft)}
+td.r,th.r{text-align:right}
+.st{font-size:12px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.st.sold{color:var(--ok)} .st.unsold,.st.pool{color:var(--muted)} .st.live{color:var(--live)}
+.done{padding:30px 20px;text-align:center;display:flex;flex-direction:column;gap:12px;align-items:center}
+.done h3{font-family:var(--display);font-size:40px;text-transform:uppercase;margin:0}
+.kbd{font-size:11px;border:1px solid var(--line);border-radius:4px;padding:1px 5px;background:var(--surface-2)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div class="brand">
+      <h1>Auction <span>It</span> Out</h1>
+      <span class="proto">Prototype · simulated rival teams</span>
+    </div>
+    <div class="top-actions">
+      <span class="pill" id="status"><span class="dot"></span><span id="statusText">Setup</span></span>
+      <button class="btn" id="backBtn" hidden>Back to setup</button>
+    </div>
+  </header>
+
+  <!-- ================= SETUP ================= -->
+  <div id="setupView" class="wrap" style="max-width:none">
+    <div class="steps"><b>Before the auction</b> · Agree the rules with all participants, load the player sheet, then start. Rules lock once bidding begins.</div>
+    <div class="summary" id="summary"></div>
+    <div class="setup">
+      <section class="panel form">
+        <div class="group">
+          <h2 style="margin:0">Rules</h2>
+          <div class="row2">
+            <div class="field"><label for="sTeams">Participants</label><input id="sTeams" type="number" min="2" max="10"></div>
+            <div class="field"><label for="sPurse">Purse each (₹ Cr)</label><input id="sPurse" type="number" min="1" step="1"></div>
+          </div>
+          <div class="field"><label for="sTimer">Bid timer (seconds)</label><input id="sTimer" type="number" min="3" max="60"><span class="hint">The clock restarts after every bid. When it runs out, the player goes to the highest bidder.</span></div>
+        </div>
+        <div class="group">
+          <span class="fl" style="font-weight:600;font-size:13px">Bid increments</span>
+          <span class="hint" style="font-size:12px;color:var(--muted);margin-top:-6px">Each click adds a fixed amount. Once the bid reaches a level's starting price, that level's raise applies. Amounts in ₹ lakh (100 = ₹1 Cr).</span>
+          <div class="slabs" id="slabs"></div>
+          <button class="btn" id="addSlab" type="button" style="align-self:flex-start">Add level</button>
+          <div class="ladder" id="ladder"></div>
+        </div>
+        <div class="group">
+          <span class="fl" style="font-weight:600;font-size:13px">Squad rules</span>
+          <div class="row2">
+            <div class="field"><label for="sMin">Min squad</label><input id="sMin" type="number" min="0" max="25"></div>
+            <div class="field"><label for="sMax">Max squad</label><input id="sMax" type="number" min="1" max="25"></div>
+            <div class="field"><label for="sBowl">Min bowlers</label><input id="sBowl" type="number" min="0" max="10"></div>
+            <div class="field"><label for="sAR">Min all-rounders</label><input id="sAR" type="number" min="0" max="10"></div>
+          </div>
+          <span class="hint" style="font-size:12px;color:var(--muted)">Teams can't spend or fill slots in a way that leaves them unable to meet these rules.</span>
+        </div>
+        <div class="group">
+          <div class="field"><label for="sAggr">Rival team behaviour (prototype only)</label>
+            <select id="sAggr"><option value="low">Cautious</option><option value="medium">Balanced</option><option value="high">Aggressive</option></select></div>
+        </div>
+      </section>
+
+      <section class="panel listpanel">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap">
+          <h2 style="margin:0">Player sheet</h2>
+          <span class="empty" id="listSource">Sample list loaded</span>
+        </div>
+        <div class="drop" id="drop">
+          <div class="txt">
+            <b>Upload your player sheet (.xlsx or .csv)</b>
+            <span class="empty">Rows play in the order you set. Columns:</span>
+            <div class="cols"><code>Order</code><code>Player</code><code>Role</code><code>Base price</code><code class="opt">Country (optional)</code></div>
+          </div>
+          <label class="btn primary" for="file" style="display:inline-block">Choose file</label>
+          <input type="file" id="file" accept=".xlsx,.xls,.csv" hidden>
+          <button class="btn" id="sampleBtn">Use sample list</button>
+          <button class="btn" id="copyTpl">Copy CSV template</button>
+        </div>
+        <div class="empty" style="margin-top:-6px">Role accepts Batter, Bowler, All-rounder or Wicketkeeper (or BAT, BOWL, AR, WK). Base price is in lakh, or write it like "2 Cr" or "50 L".</div>
+        <div id="parseMsg"></div>
+        <div class="checks" id="checks"></div>
+        <div class="tablewrap tall panel" style="border-radius:8px">
+          <table><thead><tr><th>Order</th><th>Player</th><th>Role</th><th class="r">Base price</th><th>Country</th></tr></thead><tbody id="preview"></tbody></table>
+        </div>
+      </section>
+    </div>
+    <div class="startbar">
+      <span class="empty" id="startNote"></span>
+      <button class="btn go" id="startBtn">Start auction</button>
+    </div>
+  </div>
+
+  <!-- ================= ROOM ================= -->
+  <div id="roomView" class="wrap" style="max-width:none" hidden>
+    <div class="room">
+      <section class="panel stage" aria-live="polite">
+        <div class="stage-head">
+          <span class="label" id="lotLabel"></span>
+          <span class="label" id="rulesLabel"></span>
+        </div>
+        <div id="stageMain"></div>
+        <div class="overlay" id="overlay" hidden></div>
+      </section>
+      <aside class="side">
+        <section class="panel you" id="youPanel"></section>
+        <section class="panel feed"><div class="label">Bid feed</div><ol id="feed"></ol></section>
+      </aside>
+    </div>
+
+    <section>
+      <h2>Teams</h2>
+      <div class="teams" id="teams"></div>
+    </section>
+
+    <section>
+      <div class="pool-head">
+        <h2>Player pool</h2>
+        <div class="filters" id="filters">
+          <button aria-pressed="true" data-f="ALL">All</button>
+          <button aria-pressed="false" data-f="BAT">Batters</button>
+          <button aria-pressed="false" data-f="BOWL">Bowlers</button>
+          <button aria-pressed="false" data-f="AR">All-rounders</button>
+          <button aria-pressed="false" data-f="WK">Keepers</button>
+        </div>
+      </div>
+      <div class="panel tablewrap">
+        <table><thead><tr><th>Order</th><th>Player</th><th>Role</th><th class="r">Base price</th><th>Status</th><th class="r">Sold for</th><th>Team</th></tr></thead><tbody id="pool"></tbody></table>
+      </div>
+    </section>
+  </div>
+</div>
+
+<script>
+(() => {
+const $ = id => document.getElementById(id);
+let S = {teams:6, purseCr:20, timer:12, slabs:[{from:0,step:5},{from:100,step:10}], minSquad:3, maxSquad:8, minBowl:1, minAR:1, aggr:'medium'};
+
+const TEAM_DEFS = [
+  ['you','Coastal Chargers','#D99A06'],['hhk','Hill City Hawks','#2F7DD1'],['mmv','Metro Mavericks','#8A4FD8'],
+  ['rry','Riverside Royals','#D2323F'],['dfc','Desert Falcons','#15845A'],['htn','Harbour Titans','#E0663A'],
+  ['vvk','Valley Vikings','#0E9AA7'],['ssp','Summit Spartans','#6B7A99'],['lnl','Lakeside Lions','#C2489A'],['ptg','Port Tigers','#8C6B1F'],
+];
+const SAMPLE = [
+  [1,'Arjun Rathore','BAT','IND',200],[2,'Liam Carver','AR','OVS',200],[3,'Kabir Menon','BOWL','IND',150],
+  [4,'Dev Sharma','WK','IND',100],[5,'Tomas Reyes','BOWL','OVS',150],[6,'Rohit Balan','AR','IND',75],
+  [7,'Imran Qadir','AR','IND',100],[8,'Noah Whitfield','BAT','OVS',100],[9,'Sameer Kulkarni','BOWL','IND',50],
+  [10,'Aditya Rao','WK','IND',30],[11,'Jaden Okafor','BOWL','OVS',75],[12,'Vikram Joshi','AR','IND',50],
+  [13,'Harsh Tiwari','AR','IND',20],[14,'Ethan Brooks','AR','OVS',75],[15,'Manav Pillai','BOWL','IND',20],
+  [16,'Kunal Desai','BAT','IND',30],[17,'Oliver Grant','WK','OVS',50],[18,'Rahul Nair','BOWL','IND',20],
+];
+const ROLE = {BAT:'Batter', BOWL:'Bowler', AR:'All-rounder', WK:'Wicketkeeper'};
+const ROLE_NOUN = {BOWL:'bowler', AR:'all-rounder'};
+
+let sheet = SAMPLE.map(r => ({order:r[0], name:r[1], role:r[2], origin:r[3], base:r[4], country:r[3]==='OVS'?'Overseas':'India'}));
+let teams, players, phase = 'setup', live = null, feed = [], round = 1, filter = 'ALL', nextAt = 0, resultTimer = null, minBase = 20;
+
+const fmt = l => l >= 100 ? '₹' + (+(l/100).toFixed(2)) + ' Cr' : '₹' + l + ' L';
+const team = id => teams.find(t => t.id === id);
+const pl = id => players.find(p => p.id === id);
+const stepFor = a => { let st = S.slabs[0].step; for (const s of S.slabs) if (a >= s.from) st = s.step; return st; };
+const curPlayer = () => live && pl(live.pid);
+const nextBid = () => live.leader ? live.bid + stepFor(live.bid) : curPlayer().base;
+const rand = (a,b) => a + Math.random()*(b-a);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+
+// ---------- Squad rules ----------
+function counts(t, extra){
+  const c = {BAT:0,BOWL:0,AR:0,WK:0};
+  t.squad.forEach(id => c[pl(id).role]++);
+  if (extra) c[extra.role]++;
+  return c;
+}
+function missing(t, extra){
+  const c = counts(t, extra), m = [];
+  for (let i = c.BOWL; i < S.minBowl; i++) m.push('BOWL');
+  for (let i = c.AR; i < S.minAR; i++) m.push('AR');
+  return m;
+}
+function reserveAfter(t, p){
+  const slotsToFill = Math.max(S.minSquad - (t.squad.length + 1), missing(t, p).length, 0);
+  return slotsToFill * minBase;
+}
+function whyNot(t){
+  if (phase !== 'live') return 'Waiting for the next player';
+  const p = curPlayer();
+  if (live.leader === t.id) return 'You are the highest bidder';
+  if (t.squad.length >= S.maxSquad) return 'Your squad is full';
+  const slotsLeft = S.maxSquad - (t.squad.length + 1), need = missing(t, p);
+  if (need.length > slotsLeft){
+    const names = [...new Set(need)].map(r => ROLE_NOUN[r]).join(' and ');
+    return `Your remaining slots must go to a ${names}`;
+  }
+  const amt = nextBid();
+  if (amt > t.purse) return 'Not enough purse left for ' + fmt(amt);
+  if (amt > t.purse - reserveAfter(t, p)) return `Keep ${fmt(reserveAfter(t, p))} to complete your squad`;
+  return null;
+}
+function maxBidFor(t){
+  if (t.squad.length >= S.maxSquad) return 0;
+  const p = curPlayer();
+  return Math.max(0, t.purse - (p ? reserveAfter(t, p) : Math.max(S.minSquad - t.squad.length - 1, missing(t).length - 1, 0) * minBase));
+}
+
+// ---------- Setup ----------
+const FIELDS = [['sTeams','teams',2,10],['sPurse','purseCr',1,100000],['sTimer','timer',3,60],['sMin','minSquad',0,25],['sMax','maxSquad',1,25],['sBowl','minBowl',0,10],['sAR','minAR',0,10]];
+function fillForm(){
+  FIELDS.forEach(([id,k]) => $(id).value = S[k]);
+  renderSlabs();
+  $('sAggr').value = S.aggr;
+}
+function readForm(){
+  FIELDS.forEach(([id,k,min,max]) => { const v = Math.round(+$(id).value); if (Number.isFinite(v) && $(id).value !== '') S[k] = Math.min(max, Math.max(min, v)); });
+  readSlabs();
+  S.aggr = $('sAggr').value;
+}
+function renderSetup(){
+  const n = sheet.length, T = S.teams;
+  const c = {BAT:0,BOWL:0,AR:0,WK:0}; sheet.forEach(p => c[p.role]++);
+  const mb = n ? Math.min(...sheet.map(p => p.base)) : 0;
+  $('summary').innerHTML = `
+    <div><div class="label">Participants</div><div class="v num">${T}</div></div>
+    <div><div class="label">Players in sheet</div><div class="v num">${n}</div></div>
+    <div><div class="label">Purse each</div><div class="v num">${fmt(S.purseCr*100)}</div></div>
+    <div><div class="label">Players per team</div><div class="v num">${S.minSquad}–${S.maxSquad}</div></div>`;
+  const checks = [
+    [n >= T*S.minSquad, `${n} players for ${T} teams: ${n >= T*S.minSquad ? 'enough' : 'not enough'} for everyone to reach the minimum squad of ${S.minSquad} (needs ${T*S.minSquad})`],
+    [c.BOWL >= T*S.minBowl, `${c.BOWL} bowlers: ${c.BOWL >= T*S.minBowl ? 'enough' : 'not enough'} for ${S.minBowl} per team`],
+    [c.AR >= T*S.minAR, `${c.AR} all-rounders: ${c.AR >= T*S.minAR ? 'enough' : 'not enough'} for ${S.minAR} per team`],
+    [S.purseCr*100 >= Math.max(S.minSquad, S.minBowl + S.minAR)*mb, `Purse covers a minimum squad at the lowest base price (${fmt(mb)})`],
+    [n <= T*S.maxSquad, n <= T*S.maxSquad ? `Room for every player (${T*S.maxSquad} squad slots)` : `Only ${T*S.maxSquad} squad slots for ${n} players, so some will go unsold`],
+  ];
+  $('checks').innerHTML = checks.map(([ok, t]) => `<div class="c ${ok?'ok':'warn'}"><i>${ok?'✓':'!'}</i><span>${t}</span></div>`).join('');
+  $('preview').innerHTML = sheet.map(p => `<tr><td class="num">${p.order}</td><td><b>${esc(p.name)}</b></td><td>${ROLE[p.role]}</td><td class="r num">${fmt(p.base)}</td><td>${p.origin === 'OVS' ? 'Overseas' : esc(p.country || 'India')}</td></tr>`).join('') || `<tr><td colspan="5" class="empty">No players loaded yet.</td></tr>`;
+  renderLadder();
+  $('startBtn').disabled = n === 0;
+  $('startNote').textContent = n ? `You play as ${TEAM_DEFS[0][1]} against ${T-1} simulated teams. The app runs every lot on its own.` : 'Load a player sheet to start.';
+}
+
+function normRole(v){
+  const s = String(v).toLowerCase().replace(/[^a-z]/g,'');
+  if (/^(wk|wicketkeeper|keeper|wicketkeeperbatter|wkbat|wkbatter)/.test(s)) return 'WK';
+  if (/^(ar|allrounder|allround)/.test(s)) return 'AR';
+  if (/^(bowl|bowler)/.test(s)) return 'BOWL';
+  if (/^(bat|batter|batsman|batting)/.test(s)) return 'BAT';
+  return null;
+}
+function parseMoney(v){
+  if (typeof v === 'number') return v > 0 ? Math.round(v) : null;
+  const s = String(v).toLowerCase().replace(/[₹,\s]/g,'');
+  const num = parseFloat(s);
+  if (!Number.isFinite(num) || num <= 0) return null;
+  if (/cr/.test(s)) return Math.round(num*100);
+  return Math.round(num);
+}
+function parseRows(rows){
+  const errs = [], out = [];
+  rows.forEach((r, i) => {
+    const m = {};
+    for (const k in r){
+      const key = k.toLowerCase().replace(/[^a-z]/g,'');
+      if (/^(order|auctionorder|lot|lotno|sno|slno|no|seq|sequence)$/.test(key) || k.trim() === '#') m.order = r[k];
+      else if (/^(player|playername|name)$/.test(key)) m.name = r[k];
+      else if (/^(role|type|skill|category|specialism)$/.test(key)) m.role = r[k];
+      else if (/^base/.test(key) || key === 'price') m.base = r[k];
+      else if (/^(country|origin|nationality)$/.test(key)) m.country = r[k];
+    }
+    const line = i + 2;
+    if (!m.name || !String(m.name).trim()){ if (Object.values(r).some(v => String(v).trim())) errs.push(`Row ${line}: player name is missing`); return; }
+    const role = normRole(m.role || '');
+    if (!role){ errs.push(`Row ${line} (${m.name}): role "${m.role || ''}" not recognised`); return; }
+    const base = parseMoney(m.base ?? '');
+    if (!base){ errs.push(`Row ${line} (${m.name}): base price "${m.base ?? ''}" is not a number`); return; }
+    const ord = parseFloat(m.order);
+    const country = String(m.country || '').trim();
+    const overseas = country && !/^(ind|india|indian)$/i.test(country);
+    out.push({order: Number.isFinite(ord) ? ord : out.length + 1, name:String(m.name).trim(), role, base, origin: overseas ? 'OVS' : 'IND', country: country || 'India'});
+  });
+  out.sort((a,b) => a.order - b.order);
+  return {out, errs};
+}
+function csvToRows(text){
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  const split = l => { const res = []; let cur = '', q = false; for (const ch of l){ if (ch === '"') q = !q; else if (ch === ',' && !q){ res.push(cur); cur = ''; } else cur += ch; } res.push(cur); return res.map(s => s.trim()); };
+  const head = split(lines[0] || '');
+  return lines.slice(1).map(l => { const v = split(l), o = {}; head.forEach((h,i) => o[h] = v[i] ?? ''); return o; });
+}
+async function loadFile(f){
+  if (!f) return;
+  let rows;
+  try {
+    if (window.XLSX){
+      const wb = XLSX.read(await f.arrayBuffer(), {type:'array'});
+      rows = XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]], {defval:''});
+    } else if (/\.csv$/i.test(f.name)) rows = csvToRows(await f.text());
+    else throw new Error('Excel reader did not load. Save the sheet as CSV and try again.');
+  } catch(e){ $('parseMsg').innerHTML = `<div class="msg bad">Couldn't read ${esc(f.name)}. ${esc(e.message || '')}</div>`; return; }
+  const {out, errs} = parseRows(rows);
+  if (!out.length){ $('parseMsg').innerHTML = `<div class="msg bad">No players found in ${esc(f.name)}. Check that the first row has the column names Order, Player, Role and Base price.${errs.length?'<ul>'+errs.slice(0,8).map(e=>`<li>${esc(e)}</li>`).join('')+'</ul>':''}</div>`; return; }
+  sheet = out;
+  $('listSource').textContent = f.name;
+  $('parseMsg').innerHTML = errs.length
+    ? `<div class="msg bad">Loaded ${out.length} players. ${errs.length} row${errs.length>1?'s were':' was'} skipped:<ul>${errs.slice(0,8).map(e=>`<li>${esc(e)}</li>`).join('')}</ul></div>`
+    : `<div class="msg ok">Loaded ${out.length} players from ${esc(f.name)} in auction order.</div>`;
+  renderSetup();
+}
+
+// ---------- Auction ----------
+function startAuction(){
+  readForm();
+  if (S.minSquad > S.maxSquad) S.minSquad = S.maxSquad;
+  teams = TEAM_DEFS.slice(0, S.teams).map(([id,name,color]) => ({id, name, color, you:id==='you', purse:S.purseCr*100, squad:[]}));
+  players = sheet.map((p,i) => ({...p, id:i+1, status:'pool', to:null, price:null}));
+  minBase = Math.min(...players.map(p => p.base));
+  feed = []; round = 1; live = null;
+  $('setupView').hidden = true; $('roomView').hidden = false; $('backBtn').hidden = false;
+  phase = 'between'; nextAt = Date.now() + 3000;
+  render(); window.scrollTo(0,0);
+}
+
+function startNext(){
+  const p = players.find(x => x.status === 'pool');
+  if (!p){ phase = 'done'; live = null; render(); return; }
+  const [interest, mult] = {low:[.45,.85], medium:[.6,1], high:[.78,1.25]}[S.aggr];
+  const vals = {};
+  teams.filter(t => !t.you).forEach(t => {
+    const needs = missing(t).includes(p.role);
+    const keen = Math.random() < interest + (needs ? .25 : 0);
+    const star = 1 + Math.min(p.base, 200)/200 * 1.6;
+    vals[t.id] = keen ? Math.round(p.base * (1 + star*rand(.3,1.2)) * mult * (needs ? 1.3 : 1) / 5) * 5 : 0;
+  });
+  p.status = 'live';
+  live = {pid:p.id, bid:p.base, leader:null, endsAt:Date.now() + (S.timer+3)*1000, vals, botAt:0, bids:0};
+  phase = 'live';
+  scheduleBot(true);
+  render(); flashAmount();
+}
+function scheduleBot(opening){
+  const T = S.timer*1000;
+  live.botAt = Date.now() + (opening ? rand(1500,4000) : Math.random() < .25 ? rand(T*.55, T*.88) : rand(700, Math.min(4200, T*.6)));
+}
+function placeBid(tid){
+  const t = team(tid);
+  if (whyNot(t)) return;
+  const amt = nextBid();
+  live.bid = amt; live.leader = tid; live.bids++;
+  live.endsAt = Date.now() + S.timer*1000;
+  feed.unshift({type:'bid', text:t.name, amt, color:t.color, mine:t.you});
+  scheduleBot(false);
+  render(); flashAmount();
+}
+function botTurn(){
+  const amt = nextBid();
+  const c = teams.filter(t => !t.you && !whyNot(t) && (live.vals[t.id]||0) >= amt);
+  if (!c.length){ live.botAt = Infinity; return; }
+  placeBid(c[Math.floor(Math.random()*c.length)].id);
+}
+function closeLot(){
+  const p = curPlayer();
+  let html;
+  if (live.leader){
+    const t = team(live.leader);
+    p.status='sold'; p.to=t.id; p.price=live.bid; t.purse -= live.bid; t.squad.push(p.id);
+    feed.unshift({type:'res', text:`${p.name} sold to ${t.you?'you':t.name}`, amt:live.bid, color:t.color, mine:t.you});
+    html = `<div><div class="stamp">Sold</div><p>${esc(p.name)} to <span style="color:${t.color}">${t.you?'you':t.name}</span></p><div class="sub num">for ${fmt(live.bid)} · ${live.bids} bid${live.bids>1?'s':''}</div></div>`;
+  } else {
+    p.status = 'unsold';
+    feed.unshift({type:'res', text:`${p.name} unsold`, amt:null});
+    html = `<div><div class="stamp unsold">Unsold</div><p>${esc(p.name)}</p><div class="sub">No bids at base price ${fmt(p.base)}</div></div>`;
+  }
+  phase = 'result';
+  $('overlay').innerHTML = html; $('overlay').hidden = false;
+  render();
+  resultTimer = setTimeout(() => { $('overlay').hidden = true; live = null; phase = 'between'; nextAt = Date.now() + 3000; render(); }, 2600);
+}
+
+// ---------- Rendering ----------
+const CIRC = 2*Math.PI*42;
+function renderStatus(){
+  $('status').className = 'pill' + (phase==='live' ? ' live' : '');
+  $('statusText').textContent = {setup:'Setup', live:'Live', result:'Hammer down', between:'Next lot', done:'Closed'}[phase];
+}
+function renderStage(){
+  const main = $('stageMain');
+  const done = players.filter(x => x.status==='sold' || x.status==='unsold').length;
+  $('lotLabel').textContent = phase === 'done' ? 'All lots complete' : `${round === 1 ? 'Lot' : 'Unsold round · lot'} ${Math.min(done+1, players.length)} of ${players.length}`;
+  $('rulesLabel').textContent = `${S.timer}s bid timer · runs automatically`;
+  if (phase === 'done'){
+    const uns = players.filter(x => x.status === 'unsold').length;
+    main.innerHTML = `<div class="done"><h3>Auction closed</h3><div class="empty">${players.length - uns} players sold, ${uns} unsold.</div>${uns && round === 1 ? '<button class="btn primary" id="unsoldRound">Run unsold round</button>' : ''}</div>`;
+    const b = $('unsoldRound');
+    if (b) b.onclick = () => { players.forEach(p => { if (p.status==='unsold') p.status='pool'; }); round = 2; phase = 'between'; nextAt = Date.now() + 2000; render(); };
+    return;
+  }
+  const p = live ? curPlayer() : players.find(x => x.status === 'pool');
+  if (!p){ main.innerHTML = ''; return; }
+  const ldr = live && live.leader ? team(live.leader) : null;
+  const you = team('you'), reason = whyNot(you), upcoming = !live;
+  main.innerHTML = `
+    <div class="stage-body">
+      <div class="player">
+        <div class="role-row"><span class="tag role">${ROLE[p.role]}</span><span class="tag">${p.origin === 'OVS' ? esc(p.country) : 'India'}</span>${upcoming ? '<span class="tag">Up next</span>' : ''}</div>
+        <h3 class="pname">${esc(p.name)}</h3>
+        <div class="facts">
+          <div class="fact"><div class="label">Base price</div><div class="v num">${fmt(p.base)}</div></div>
+          <div class="fact"><div class="label">Next raise</div><div class="v num">+${fmt(stepFor(ldr ? live.bid : p.base))}</div></div>
+        </div>
+      </div>
+      <div class="bidside">
+        <div class="bidline">
+          <div><div class="label">${ldr ? 'Current bid' : 'Opening at'}</div><div class="amount num" id="amount">${fmt(live ? live.bid : p.base)}</div></div>
+          <div class="ring${upcoming?' wait':''}" id="ring"><svg viewBox="0 0 96 96"><circle class="track" cx="48" cy="48" r="42"/><circle class="prog" id="prog" cx="48" cy="48" r="42" stroke-dasharray="${CIRC}" stroke-dashoffset="0"/></svg><div class="sec num" id="sec">–</div></div>
+        </div>
+        <div class="leader">${ldr ? `<span class="swatch" style="background:${ldr.color}"></span>${ldr.you ? 'You lead' : ldr.name + ' leads'}` : `<span class="empty">${upcoming ? 'Bidding opens in a moment' : 'No bids yet'}</span>`}</div>
+        <button class="bidbtn" id="bidBtn" ${reason ? 'disabled' : ''}>
+          <span class="big num">Bid ${fmt(live ? nextBid() : p.base)}</span>
+          <span class="small">${reason ? '&nbsp;' : 'Press <span class="kbd">B</span> or tap'}</span>
+        </button>
+        <div class="why">${reason && !upcoming ? reason : ''}</div>
+      </div>
+    </div>`;
+  $('bidBtn').onclick = () => placeBid('you');
+  updateClock();
+}
+function reqChips(t){
+  const c = counts(t), out = [];
+  if (S.minBowl) out.push(`<span class="${c.BOWL>=S.minBowl?'met':'miss'}">${c.BOWL>=S.minBowl?'✓':'Need'} ${S.minBowl} bowler${S.minBowl>1?'s':''}</span>`);
+  if (S.minAR) out.push(`<span class="${c.AR>=S.minAR?'met':'miss'}">${c.AR>=S.minAR?'✓':'Need'} ${S.minAR} all-rounder${S.minAR>1?'s':''}</span>`);
+  if (S.minSquad) out.push(`<span class="${t.squad.length>=S.minSquad?'met':'miss'}">${t.squad.length>=S.minSquad?'✓':'Need'} ${S.minSquad} players</span>`);
+  return `<div class="req">${out.join('')}</div>`;
+}
+function renderYou(){
+  const t = team('you'), total = S.purseCr*100;
+  $('youPanel').innerHTML = `
+    <div class="you-head"><span class="swatch" style="background:${t.color}"></span><b>${t.name}</b><span class="tag" style="margin-left:auto">Your team</span></div>
+    <div><div class="label">Purse left</div><div class="purse num">${fmt(t.purse)}</div></div>
+    <div class="bar"><i style="width:${(t.purse/total*100).toFixed(1)}%"></i></div>
+    <div class="kv">
+      <div><div class="label">Spent</div><div class="v num">${fmt(total - t.purse)}</div></div>
+      <div><div class="label">Squad</div><div class="v num">${t.squad.length} / ${S.maxSquad}</div></div>
+      <div><div class="label">Max bid</div><div class="v num">${fmt(maxBidFor(t))}</div></div>
+    </div>
+    ${reqChips(t)}`;
+}
+function renderFeed(){
+  $('feed').innerHTML = feed.slice(0,40).map(f => f.type === 'res'
+    ? `<li class="res${f.mine?' mine':''}">${f.color?`<span class="swatch" style="background:${f.color}"></span>`:''}${esc(f.text)}<span class="t num">${f.amt!=null?fmt(f.amt):'–'}</span></li>`
+    : `<li class="${f.mine?'mine':''}"><span class="swatch" style="background:${f.color}"></span>${f.mine?'You':f.text}<span class="t num">${fmt(f.amt)}</span></li>`).join('') || '<li class="empty">Bids will appear here.</li>';
+}
+function renderTeams(){
+  const total = S.purseCr*100;
+  $('teams').innerHTML = teams.map(t => `
+    <div class="panel team${t.you?' me':''}">
+      <div class="team-top"><span class="swatch" style="background:${t.color}"></span><b>${t.name}</b><span class="n num">${t.squad.length}/${S.maxSquad}</span></div>
+      <div class="team-money"><span>Purse left <b class="num">${fmt(t.purse)}</b></span><span class="num">spent ${fmt(total - t.purse)}</span></div>
+      <div class="bar"><i style="width:${(t.purse/total*100).toFixed(1)}%;background:${t.color}"></i></div>
+      ${reqChips(t)}
+      ${t.squad.length ? `<ul class="squad">${t.squad.map(id => { const p = pl(id); return `<li><span class="rc">${p.role}</span><span>${esc(p.name)}</span><span class="p num">${fmt(p.price)}</span></li>`; }).join('')}</ul>` : '<span class="empty">No players yet</span>'}
+    </div>`).join('');
+}
+function renderPool(){
+  $('pool').innerHTML = players.filter(p => filter==='ALL' || p.role===filter).map(p => {
+    const t = p.to && team(p.to);
+    const st = {pool:'Upcoming', live:'On the block', sold:'Sold', unsold:'Unsold'}[p.status];
+    return `<tr class="${p.status==='live'?'now':''}"><td class="num">${p.order}</td><td><b>${esc(p.name)}</b></td><td>${ROLE[p.role]}</td><td class="r num">${fmt(p.base)}</td><td><span class="st ${p.status}">${st}</span></td><td class="r num">${p.price?fmt(p.price):'–'}</td><td>${t?`<span class="leader" style="font-size:14px;min-height:0"><span class="swatch" style="background:${t.color}"></span>${t.you?'You':t.name}</span>`:''}</td></tr>`;
+  }).join('');
+}
+function render(){
+  renderStatus();
+  if (phase === 'setup') return renderSetup();
+  renderStage(); renderYou(); renderFeed(); renderTeams(); renderPool();
+}
+function flashAmount(){ const a = $('amount'); if (!a) return; a.classList.remove('flash'); void a.offsetWidth; a.classList.add('flash'); }
+function updateClock(){
+  const sec = $('sec'), prog = $('prog'), ring = $('ring');
+  if (!sec) return;
+  if (phase === 'between'){
+    const left = Math.max(0, nextAt - Date.now());
+    sec.textContent = Math.ceil(left/1000); prog.style.strokeDashoffset = CIRC*(1 - left/3000); return;
+  }
+  if (!live){ sec.textContent = '–'; return; }
+  const left = Math.max(0, live.endsAt - Date.now());
+  sec.textContent = Math.ceil(left/1000);
+  prog.style.strokeDashoffset = CIRC * (1 - Math.min(1, left/(S.timer*1000)));
+  ring.classList.toggle('low', left < 4000);
+}
+
+setInterval(() => {
+  const now = Date.now();
+  if (phase === 'between'){ if (now >= nextAt) startNext(); else updateClock(); return; }
+  if (phase !== 'live') return;
+  if (now >= live.endsAt){ closeLot(); return; }
+  if (now >= live.botAt) botTurn();
+  updateClock();
+}, 100);
+
+// ---------- Controls ----------
+FIELDS.map(f => f[0]).concat(['sAggr']).forEach(id => $(id).addEventListener('input', () => { readForm(); renderSetup(); }));
+$('file').onchange = e => { loadFile(e.target.files[0]); e.target.value = ''; };
+const drop = $('drop');
+drop.addEventListener('dragover', e => { e.preventDefault(); drop.classList.add('over'); });
+drop.addEventListener('dragleave', () => drop.classList.remove('over'));
+drop.addEventListener('drop', e => { e.preventDefault(); drop.classList.remove('over'); loadFile(e.dataTransfer.files[0]); });
+$('sampleBtn').onclick = () => { sheet = SAMPLE.map(r => ({order:r[0], name:r[1], role:r[2], origin:r[3], base:r[4], country:r[3]==='OVS'?'Overseas':'India'})); $('listSource').textContent = 'Sample list loaded'; $('parseMsg').innerHTML = ''; renderSetup(); };
+const TPL = 'Order,Player,Role,Base price,Country\n1,Arjun Rathore,Batter,2 Cr,India\n2,Liam Carver,All-rounder,2 Cr,England\n3,Kabir Menon,Bowler,150,India\n4,Dev Sharma,Wicketkeeper,1 Cr,India\n';
+$('copyTpl').onclick = async () => {
+  try { await navigator.clipboard.writeText(TPL); $('copyTpl').textContent = 'Copied'; }
+  catch { $('parseMsg').innerHTML = `<div class="msg">Copy this into a new sheet:<pre style="margin:6px 0 0;white-space:pre-wrap;user-select:all">${TPL}</pre></div>`; }
+  setTimeout(() => $('copyTpl').textContent = 'Copy CSV template', 1800);
+};
+$('startBtn').onclick = startAuction;
+$('backBtn').onclick = () => {
+  clearTimeout(resultTimer); $('overlay').hidden = true;
+  phase = 'setup'; live = null;
+  $('roomView').hidden = true; $('setupView').hidden = false; $('backBtn').hidden = true;
+  render();
+};
+$('filters').onclick = e => {
+  const b = e.target.closest('button'); if (!b) return;
+  filter = b.dataset.f;
+  [...$('filters').children].forEach(x => x.setAttribute('aria-pressed', x === b));
+  renderPool();
+};
+document.addEventListener('keydown', e => {
+  if ((e.key === 'b' || e.key === 'B') && phase === 'live' && !e.target.closest('input,select,textarea')){ e.preventDefault(); placeBid('you'); }
+});
+
+
+// ---------- Increment levels ----------
+function renderSlabs(){
+  $('slabs').innerHTML = S.slabs.map((sl,i) => `
+    <div class="slab">
+      <div class="field">${i===0?'<span class="hint">From</span><div class="fixed">Base price</div>':`<label class="hint" for="slFrom${i}">From (₹ L)</label><input id="slFrom${i}" type="number" min="1" value="${sl.from}">`}</div>
+      <div class="field"><label class="hint" for="slStep${i}">Raise per bid (₹ L)</label><input id="slStep${i}" type="number" min="1" value="${sl.step}"></div>
+      <button class="x" type="button" data-rm="${i}" aria-label="Remove this level" ${i===0?'disabled':''}>×</button>
+    </div>`).join('');
+}
+function readSlabs(){
+  const rows = S.slabs.map((sl,i) => {
+    const f = i===0 ? 0 : Math.round(+$('slFrom'+i).value), st = Math.round(+$('slStep'+i).value);
+    return {from: i===0 ? 0 : (f >= 1 ? f : sl.from), step: st >= 1 ? st : sl.step};
+  });
+  S.slabs = [rows[0], ...rows.slice(1).sort((a,b) => a.from - b.from)];
+}
+function renderLadder(){
+  const lv = [...S.slabs].sort((a,b) => a.from - b.from);
+  const parts = lv.map((sl,i) => {
+    const to = lv[i+1] ? lv[i+1].from : null;
+    const range = i===0 ? (to ? `Up to ${fmt(to)}` : 'All bids') : (to ? `${fmt(sl.from)} to ${fmt(to)}` : `${fmt(sl.from)} and above`);
+    return `${range}: <b>+${fmt(sl.step)}</b> per bid`;
+  });
+  let a = 50, ex = [fmt(a)];
+  for (let i = 0; i < 14 && ex.length < 12; i++){ a += stepFor(a); ex.push(fmt(a)); }
+  $('ladder').innerHTML = parts.join('<br>') + `<br>Example from ₹50 L: ${ex.join(' → ')} …`;
+}
+$('slabs').addEventListener('change', () => { readSlabs(); renderSlabs(); renderSetup(); });
+$('slabs').addEventListener('click', e => { const b = e.target.closest('[data-rm]'); if (!b) return; readSlabs(); S.slabs.splice(+b.dataset.rm, 1); renderSlabs(); renderSetup(); });
+$('addSlab').onclick = () => { readSlabs(); const last = S.slabs[S.slabs.length-1]; S.slabs.push({from: Math.max(last.from, 100) + 100, step: last.step*2}); renderSlabs(); renderSetup(); };
+
+fillForm(); render();
+})();
+</script>
+
+</body></html>
